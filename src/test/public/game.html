@@ -1,0 +1,81 @@
+<html>
+  	<head>
+    <script src='./lib/quintus-all.js'></script>
+  	</head>
+  	<body>
+  		<script>
+  		window.addEventListener('load',function(e) {
+			var Q = Quintus()
+			        .include("Sprites, Scenes, Input, 2D, Touch, UI");
+			        
+			Q.setup({ maximize: true })
+			        .controls().touch(Q.SPRITE_ALL)
+			        
+			Q.Sprite.extend("Square",{
+				init: function(p) {
+					this._super(p,{
+						color: "red",
+						w: 100,
+						h: 100,
+						x: 0,
+						y: 0
+					});
+					this.on("touchEnd");
+				},
+
+				touchEnd: function(touch) {
+					this.p.color="black";
+				},
+
+				step: function(dt) {
+       				if(this.p.over) {
+         				this.p.scale = 1.2;
+       				} else {
+         			this.p.scale = 1.;
+       				}
+       			}
+			});
+			//var Player1=new Q.Player();
+			Q.scene("level1",function(stage) {
+			  	var player = new Array()
+			  	for (var k=0;k<10;k++){
+			  		player[k]=new Array();
+			  		for (var j=0;j<10;j++){
+			  			c_x=120*k+50;
+			  			c_y=120*j+50;
+			  			player[k][j]=stage.insert(new Q.Square({x:c_x,y:c_y}))
+			  		}	
+			 	}
+			});
+			Q.stageScene("level1");
+		  	Q.debug = true;
+		  	Q.debugFill = true;
+			var currentObj = null;
+		  	Q.el.addEventListener('mousemove',function(e) {
+		    var x = e.offsetX || e.layerX,
+		        y = e.offsetY || e.layerY,
+		        stage = Q.stage();
+
+    		// Use the helper methods from the Input Module on Q to
+    		// translate from canvas to stage
+		    var stageX = Q.canvasToStageX(x, stage),
+		        stageY = Q.canvasToStageY(y, stage);
+
+		    // Find the first object at that position on the stage
+		    var obj = stage.locate(stageX,stageY);
+		    
+		    // Set a `hit` property so the step method for the 
+		    // sprite can handle scale appropriately
+		    if(currentObj) { 
+		    	currentObj.p.over = false; 
+		    }
+		    if(obj) {
+		    	currentObj = obj;
+		    	obj.p.over = true;
+		    }
+		  	});
+		});
+			
+		</script>
+	</body>
+</html>
