@@ -5,23 +5,20 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="./css/bootstrap.min.css" rel="stylesheet">
+    <script src="socket.io/socket.io.js"></script>
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <title>Mywar version0.0</title>
     </head>
     <body>
-        <form>
+        <span id="players" ></span>
+        <form method="post" action="/login">
             <div class="form-group">
                 <label for="exampleInputEmail1">Email address</label>
-                <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Email">
+                <input type="email" name="username" class="-control" id="exampleInputEmail1" plaformceholder="Email">
             </div>
             <div class="form-group">
                 <label for="exampleInputPassword1">Password</label>
-                <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
-            </div>
-            <div class="checkbox">
-                <label>
-                  <input type="checkbox"> Check me out
-                </label>
+                <input type="password" name="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
             </div>
             <button type="submit" class="btn btn-default">Submit</button>
         </form>
