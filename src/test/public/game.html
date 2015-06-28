@@ -42,23 +42,39 @@
 				<div class="col-md-3" style="height:100%">
 					<div class="dropdown">
 				        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
-				        Dropdown
+				        TowerType
 				        <span class="caret"></span>
 				      	</button>
 				      	<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-				        <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" onclick="addSoldier(0)">Action</a></li>
-				        <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" onclick="addSoldier(1)">Another action</a></li>
-				        <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" onclick="addSoldier(2)">Something else here</a></li>
-				        <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" onclick="addSoldier(3)">Separated link</a></li>
+				        <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" onclick="getType(0)">Action</a></li>
+				        <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" onclick="getType(1)">Another action</a></li>
+				        <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" onclick="getType(2)">Something else here</a></li>
+				        <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" onclick="getType(3)">Separated link</a></li>
 				      	</ul>
 			   		</div>
+			   							<div class="dropdown">
+				        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+				        SoldierType
+				        <span class="caret"></span>
+				      	</button>
+				      	<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+				        <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" onclick="getSType(0)">Action</a></li>
+				        <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" onclick="getSType(1)">Another action</a></li>
+				        <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" onclick="getSType(2)">Something else here</a></li>
+				        <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" onclick="getSTyp(3)">Separated link</a></li>
+				      	</ul>
+			   		</div>
+			   		<span id="players">offline</span>
 				</div>
 				<div class="col-md-6" style="height:100%">
 					<div style="width:500;height:500;top:20%;position: relative; ">
 						<canvas id="myGame" width='500' height='500'></canvas>
 					</div>
 				</div>
-				<div class="col-md-3" style="height:100%">.col-md-3</div>
+				<div class="col-md-3" style="height:100%">
+					<span id="money">0</span>
+					<span id="success">0</span>
+				</div>
 			</div>
 		</div>
 	</body>

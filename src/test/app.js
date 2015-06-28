@@ -6,6 +6,10 @@ var io=require('socket.io')(server);
 var bodyParser = require('body-parser');
 var cookieParser=require('cookie-parser');
 var session = require('express-session');
+var  mongodb = require('mongodb');
+var  dbserver  = new mongodb.Server('localhost', 27017, {auto_reconnect:true});
+var  db = new mongodb.Db('mywar', dbserver, {safe:true});
+
 app.use(express.static(__dirname+'/public'))
 
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -101,20 +105,56 @@ app.get('/logout',function(req,res){
 var playerCount=0;
 var id=0;
 
+var gameDB={
+	'match':[
+	],
+	'mismatch':0
+
+};
+var gameCount=0;
+
 io.on('connection',function(socket){
 	playerCount++;
-	id++;	
-	console.log("connected");
+	id++;
+	console.log(playerCount);
 	setTimeout(function(){
-		socket.emit('connected',{playerID:id});
 		io.emit('count',{playerCount:playerCount});
+		if (playerCount%2==1){
+			gameDB.match[gameCount]={'player1ID':id,'player2ID':null};
+			socket.emit('waiting',{'yourID':id,'status':'waiting'});
+		}
+		else{
+			var componentID=gameDB.match[gameCount].player1ID;
+			gameDB.match[gameCount].player2ID=id;
+			//socket.emit('ready',{'yourID':id,'componentID':componentID,'status':'ready'});
+			io.emit('matched',{player1ID:componentID,player2ID:id});
+			gameCount++;
+		}
+		console.log(gameDB);
 	},1500);
+
+
 	socket.on('disconnect',function(){
+		/*if (playerCount%2==1){
+			if (!mismatch)
+				//do nothing
+			else{
+				console.log(gameDB.match['gameCount'])
+			}
+		}
+		else{
+
+		} */
 		playerCount--;
-		io.emit('count',{playerCount:playerCount})
+		io.emit('count',{playerCount:playerCount});
+	});
+	socket.on('update', function (data) {
+  		socket.broadcast.emit('updated', data);
 	});
 });
 
-
+setInterval(function(){
+		io.emit('addMoney',{'money':100});
+},1000);
 console.log("Multiplayer app listening on port 8080");
 server.listen(8080);

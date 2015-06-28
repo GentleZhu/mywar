@@ -5,11 +5,17 @@ var UiPlayers = document.getElementById("players");
 //require(objectFiles, function () {
 	function setUp () {
 	    socket.on('count', function (data) {
-	     	UiPlayers.innerHTML = 'Players: ' + data['playerCount'];
-	    });
+	     	
+	     	console.log('everyone will receive');
+	     });
 	 
-		socket.on('connected', function (data) {
-			console.log('connected');
+		socket.on('waiting', function (data) {
+			UiPlayers.innerHTML = 'You are players: ' + data['yourID']+'waiting for rivals';
+
+		});
+		socket.on('ready', function (data) {
+			console.log('connected:'+data['playerID']);
+			UiPlayers.innerHTML = 'You are players: ' + data['yourID']+'play against'+data['componentID'];
 		});
 	}
 setUp();
