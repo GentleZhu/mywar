@@ -1,5 +1,15 @@
 var towerType=0;	
 var soldierType=0;
+var map={
+	'map0':{
+		'road':[70,71,72,62,52,42,32,22,23,24,34,44,45,46,47,48,58,68,69],
+		'field':[80,81,82,83,73,63,53,43,33,54,55,56,57,67,77,78,79,60,61,51,41,31,21,11,12,13,14,15,25,35,36,37,38,39,49,59],
+		'entranceX':70,
+		'entranceY':69
+	}
+}
+var defaultD=0;
+var defaultE=map['map0'].entranceX;
 var socket = io.connect('http://localhost:8080');
 var UiPlayers = document.getElementById("players");
 var Moneycontrol = document.getElementById("money");
@@ -24,13 +34,15 @@ var money=0,success=0;
 
 				});
 				socket.on('matched', function (data) {
-				console.log('matched');
+				    console.log('matched');
 				player1ID=data['player1ID'];
 				player2ID=data['player2ID'];
 				if (!playerID){
 					//original player2
 					rivalID=player1ID;
 					playerID=player2ID;
+					defaultE=map['map0'].entranceY;
+					defaultD=2;
 					UiPlayers.innerHTML = 'You are players: ' + playerID+'play against'+rivalID;
 				}
 				else if (player1ID==playerID){
@@ -45,7 +57,7 @@ var money=0,success=0;
 					if (data['playerID']==playerID){
 						console.log('update');
 						switch(data['type']){
-							case 0:stage.insert(new Q.Soldier({x:data['x'],y:data['y'],belong:data['belong']}));break;
+							case 0:stage.insert(new Q.Soldier({x:data['x'],y:data['y'],direct:data['direct'],belong:data['belong']}));break;
 							case 1:stage.insert(new Q.Tower({x:data['x'],y:data['y'],belong:data['belong']}));break;
 						}
 					}
@@ -118,7 +130,7 @@ var money=0,success=0;
 
 				step: function(dt) {
        				if(this.p.over) {
-         				this.p.scale = 1.2;
+         				this.p.scale = 0.9;
        				} else {
          			this.p.scale = 1.;
        				}
@@ -135,7 +147,9 @@ var money=0,success=0;
 						n_vx: 60,
 						n_vy: 60,
 						life:5,
-						belong:null
+						damage:0,
+						belong:null,
+						collide:null
 					});
 					this.on("hit",this,"collision");
 					//this.p.collisionMask=4;
@@ -154,12 +168,16 @@ var money=0,success=0;
 				},
 				collision: function(col) {
 				    // .. do anything custom you need to do ..
-				
+					var p=this.p;
+					var target=col.obj;
 				    // Move the sprite away from the collision
 				    if (this.p.life==0)
 				    	this.destroy();
-					if(col.obj.isA("Square")){
-						var p=this.p;
+				    if(target.isA("Soldier")&&target.belong!=playerID&&target.collide!=this){
+				    	target.collide=this;
+				    	this.collide=target;
+				    }
+					if(target.isA("Square")){
 						p.x -= col.separate[0];
 						p.y -= col.separate[1];
 						if (col.separate[0]){
@@ -194,6 +212,7 @@ var money=0,success=0;
 						this.destroy();
 						success+=1;
 						if (success>1){
+							socket.emit('endGame',{playerID:playerID,rivalID:rivalID});
 							Q.clearStages();
 							money=0;
 							success=0;
@@ -220,9 +239,19 @@ var money=0,success=0;
 			//start game
 			//var Player1=new Q.Player();
 			function startGame(){
+				money=0;
+				Moneycontrol.innerHTML=money;
 				Q.scene("level1",function(stage) {
-				  	var player = new Array()
-				  	for (var k=0;k<10;k++){
+					var cx,cy;
+					n=map['map0'].field.length;
+					c=map['map0'].field;
+				  	var player = new Array(n);
+				  	for (var k=0;k<n;k++){
+				  		cx=50*(c[k]%10)+25;
+				  		cy=50*Math.floor(c[k]/10)+65;
+				  		player[k]=stage.insert(new Q.Square({x:cx,y:cy}))
+				  	}
+				  	/*for (var k=0;k<10;k++){
 				  		player[k]=new Array();
 				  		for (var j=0;j<10;j++){
 				  			if (j==5&&k<9||(k==8&&j<5))
@@ -231,7 +260,7 @@ var money=0,success=0;
 				  			var c_y=50*j+25+40;
 				  			player[k][j]=stage.insert(new Q.Square({x:c_x,y:c_y}))
 				  		}	
-				 	}
+				 	}*/
 				 	stage.insert(new Q.UI.Button({
 					label: "A Button",
 					y: 20,
@@ -239,10 +268,13 @@ var money=0,success=0;
 					w:20,
 					h:10
 					}, function() {
+						var cx,cy;
+						cx=50*(defaultE%10)+25;
+						cy=50*Math.floor(defaultE/10)+65;
 					//if (this.p.label == "Pressed";
 						console.log("Pressed");
-						stage.insert(new Q.Soldier({x:30,y:275,belong:playerID}));
-						socket.emit('update', { 'playerID': rivalID,'type':0,'x':30,'y':275,'belong':playerID});
+						stage.insert(new Q.Soldier({x:cx,y:cy,direct:defaultD,belong:playerID}));
+						socket.emit('update', { 'playerID': rivalID,'type':0,'x':cx,'y':cy,'direct':defaultD,'belong':playerID});
 					}));
 				 	//stage.insert(new Q.Soldier({x:30,y:275}));
 				 	//stage.insert(new Q.Soldier({x:100,y:275}));

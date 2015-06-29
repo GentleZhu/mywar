@@ -22,25 +22,34 @@
 	<style type="text/css">
 	html
     {
-     height:100%;
-     margin:0;
+    height:100%;
+    margin:0;
     }
     body
     {
         height:100%;
         margin:0; 
+        background: url('background.jpg') no-repeat center center fixed;
+		-webkit-background-size: cover;
+		-moz-background-size: cover;
+		-o-background-size: cover;
+		background-size: cover;
     }
     .container-fluid{
     	height:100%;
         margin:0; 
     }
 	</style>
+	html {
+
+}
   </head>
   	<body>
   		<div class="container-fluid">
 			<div class="row"  style="height:100%">
 				<div class="col-md-3" style="height:100%">
-					<div class="dropdown">
+			   		<div class="col-md-6">
+			   			<div class="dropdown">
 				        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
 				        TowerType
 				        <span class="caret"></span>
@@ -51,8 +60,16 @@
 				        <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" onclick="getType(2)">Something else here</a></li>
 				        <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" onclick="getType(3)">Separated link</a></li>
 				      	</ul>
+			   			</div>
+			   			<a href="#" class="thumbnail">
+      					<img src="S1.png">
+      					</a>
+						<p class="navbar-text">Signed in as Mark Otto</p>
+						<p class="navbar-text">Signed in as Mark Otto</p>
+						<p class="navbar-text">Signed in as Mark Otto</p>
 			   		</div>
-			   							<div class="dropdown">
+			   		<div class="col-md-6">
+			   			<div class="dropdown">
 				        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
 				        SoldierType
 				        <span class="caret"></span>
@@ -63,15 +80,26 @@
 				        <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" onclick="getSType(2)">Something else here</a></li>
 				        <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" onclick="getSTyp(3)">Separated link</a></li>
 				      	</ul>
+			   			</div>
+			   			<a href="#" class="thumbnail">
+      					<img src="S2.png">
+      					</a>
+
+						<p class="navbar-text">Signed in as Mark Otto</p>
+						<p class="navbar-text">Signed in as Mark Otto</p>
+						<p class="navbar-text">Signed in as Mark Otto</p>
 			   		</div>
-			   		<span id="players">offline</span>
 				</div>
 				<div class="col-md-6" style="height:100%">
+					<span id="players">offline</span>
 					<div style="width:500;height:500;top:20%;position: relative; ">
 						<canvas id="myGame" width='500' height='500'></canvas>
 					</div>
 				</div>
 				<div class="col-md-3" style="height:100%">
+					<p class="navbar-text">money $100000</p>
+					<p class="navbar-text">Time 03:56:00</p>
+					<p class="navbar-text">Goal 0/10</p>
 					<span id="money">0</span>
 					<span id="success">0</span>
 				</div>

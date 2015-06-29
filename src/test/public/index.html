@@ -9,54 +9,46 @@
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <title>Mywar version0.0</title>
     </head>
-    <body>
-        <span id="players" class="players"></span>
-        <form method="post" action="/login">
-            <div class="form-group">
-                <label for="exampleInputEmail1">Email address</label>
-                <input type="email" name="username" class="-control" id="exampleInputEmail1" plaformceholder="Email">
-            </div>
-            <div class="form-group">
-                <label for="exampleInputPassword1">Password</label>
-                <input type="password" name="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
-            </div>
-            <button type="submit" class="btn btn-default">Submit</button>
-        </form>
-        <div class="form-group has-success">
-            <label class="control-label" for="inputSuccess1">Input with success</label>
-            <input type="text" class="form-control" id="inputSuccess1">
-        </div>
-        <div class="form-group has-warning">
-            <label class="control-label" for="inputWarning1">Input with warning</label>
-            <input type="text" class="form-control" id="inputWarning1">
-        </div>
-        <div class="form-group has-error">
-            <label class="control-label" for="inputError1">Input with error</label>
-            <input type="text" class="form-control" id="inputError1">
-        </div>
-        <div class="has-success">
-            <div class="checkbox">
-                <label>
-                    <input type="checkbox" id="checkboxSuccess" value="option1">
-                    Checkbox with success
-                </label>
-            </div>
-        </div>
-        <div class="has-warning">
-            <div class="checkbox">
-                <label>
-                    <input type="checkbox" id="checkboxWarning" value="option1">
-                    Checkbox with warning
-                </label>
-            </div>
-        </div>
-        <div class="has-error">
-            <div class="checkbox">
-                <label>
-                    <input type="checkbox" id="checkboxError" value="option1">
-                    Checkbox with error
-                </label>
-            </div>
-        </div>
-    </body>
+    <body style="background-image:url('__PUBLIC__/Images/3535.jpg')">
+      <div style="margin-top:100px;">
+          <div class="container" >
+              <div class="row">
+                  <div class="col-md-4 col-md-offset-4 well">
+                  <h3>Please Login</h3><hr>
+                      <form method="post" action="/login" role='form' class="form-horizontal">
+                          <div class="form-group">
+                              <div class="col-md-3">
+                              <label for="username" class="control-label">Username:</label>
+                              </div>
+                              <div class="col-md-9">
+                                  <input type="text" class="form-control" name="username" id="username" placeholder='Enter The Username'>
+                              </div>
+                          </div>
+                          <div class="form-group">
+                              <div class="col-md-3">
+                              <label for="password" class="control-label">Password:</label>
+                              </div>
+                              <div class="col-md-9">
+                                  <input type="password" class="form-control" name="password" id="password" placeholder='Enter The Password'>
+                              </div>
+                          </div>
+                        <div class="form-group">
+                            <div class="col-md-9 col-md-offset-3">
+                                <input type="checkbox" name="Remember_me" >Remember Me
+                            </div>
+                        </div>
+                          <div class="form-group">
+                              <div class="col-md-3 col-md-offset-3">
+                                  <button class="btn btn-info" type="submit">Submit</button>
+                              </div>
+                              <div class="col-md-3 col-md-offset-3">
+                                  <button class="btn btn-default" type="reset">Reset</button>
+                              </div>
+                          </div>
+                      </form>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </body>
 </html>

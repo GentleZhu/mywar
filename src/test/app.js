@@ -6,10 +6,39 @@ var io=require('socket.io')(server);
 var bodyParser = require('body-parser');
 var cookieParser=require('cookie-parser');
 var session = require('express-session');
-var  mongodb = require('mongodb');
-var  dbserver  = new mongodb.Server('localhost', 27017, {auto_reconnect:true});
-var  db = new mongodb.Db('mywar', dbserver, {safe:true});
+var mongodb = require('mongodb');
+var mongoose = require('mongoose');
+var DB=mongoose.connect('mongodb://localhost:27017/mywar');
+var con = DB.connection;
+con.on('error', console.error.bind(console, 'connection error:'));
+con.once('open', function (callback) {
+	console.log('open');
+});
 
+var accountSchema = mongoose.Schema({
+    username: String,
+    password: String
+})
+
+/*var recordSchema = mongoose.Schema({
+	starttime:
+	endtime:
+	player1ID: String,
+	player2ID: String,
+	winner: String
+});*/
+
+/*var account = mongoose.model('account', { username: String, password: String });
+
+var Bran = new account({ username: 'Bran', password: '123zhuqi' });
+Bran.save(function (err) {
+  if (err) // ...
+  console.log('err');
+});*/
+
+//var account = mongoose.model('account', accountSchema);
+//var Bran=new account({username:'Bran',password:'123zhuqi'});
+//console.log(Bran.username);
 app.use(express.static(__dirname+'/public'))
 
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -28,26 +57,39 @@ app.use(function(req,res,next){
 	next();
 	//console.log('here\n');
 });
-
-var users={
-	tj:{name: 'tj'}
-};
-
-hash('foobar',function(err,salt,hash){
-	if (err) throw err;
-	users.tj.salt=salt;
-	users.tj.hash=hash.toString();
+var accountModel = DB.model("account",accountSchema);
+/*
+var accountEntity=new accountModel({
+	username:'Bran',
+	password:'123zhuqi'
 });
-
+console.log(accountEntity);
+accountEntity.save(function(err){
+	console.log(err);
+});*/
+/*accountModel.find({username:'Bran'}, function(err,docs){
+		console.log(docs);
+});*/
 function authenticate(name,pass,fn){
-  if (!module.parent) console.log('authenticating %s:%s',name,pass);
-  var user=users[name];
-  if (!user) return fn(new Error('Cannot find user'));
-  hash(pass, user.salt, function(err, hash){
-    if (err) return fn(err);
-    if (hash.toString() == user.hash) return fn(null, user);
-    fn(new Error('invalid password'));
-  })
+	if (!module.parent) console.log('authenticating %s:%s',name,pass);
+	//var user=users[name];
+	accountModel.find({username:name}, function(err,docs){
+		if (docs){
+			if (docs[0].password==pass)
+				return fn(null,name);
+			else
+				return fn(new Error('invalid password'));
+		}
+		else{
+			return fn(new Error('Cannot find user'));
+		}
+	});
+	//if (!user) return fn(new Error('Cannot find user'));
+	/*hash(pass, user.salt, function(err, hash){
+	if (err) return fn(err);
+	if (hash.toString() == user.hash) return fn(null, user);
+	fn(new Error('invalid password'));
+	})*/
 }
 //middleware
 function restrict(req,res,next){
@@ -85,7 +127,7 @@ app.post('/login', function(req, res){
 })
 
 app.get('/',function(req,res){
-	res.render('/game.html');
+	res.render('/index.html');
 });
 
 app.get('/game',restrict,function(req,res){
@@ -135,6 +177,7 @@ io.on('connection',function(socket){
 
 
 	socket.on('disconnect',function(){
+		socket.broadcast.emit
 		/*if (playerCount%2==1){
 			if (!mismatch)
 				//do nothing
